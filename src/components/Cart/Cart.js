@@ -3,6 +3,7 @@ import Card from '../UI/Card';
 import classes from './Cart.module.css';
 import CartItem from './CartItem';
 import { useEffect,useState } from 'react';
+import store, { cartAction } from '../store/Mg';
 //import store from '../store/Mg';
 
 const Cart = (props) => {
@@ -16,7 +17,9 @@ const Cart = (props) => {
         //..
       }
       const items = await response.json()
-      set(items)
+      items.items.map((item)=>(
+        store.dispatch(cartAction.addItem(item))
+      ))
     }
     fetchData()
   },[])
@@ -25,9 +28,9 @@ const Cart = (props) => {
     {data ? <Card className={classes.cart}>
       <h2>Your Shopping Cart</h2>
       <ul>
-        {val.map((item)=>(
+        {cartItems.items.map((item)=>(
           <CartItem
-          item={{ title: 'Test Item', quantity: item.quantity,description:item.description, total:item.total , price: item.price,id:item.itemId }}
+          item={{ title: 'Test Item', quantity: item.quantity,description:item.description, total:item.total , price: item.price,id:item.id }}
           />
 
         ))}
